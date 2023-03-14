@@ -8,5 +8,9 @@
     "start": "node index.js"
   },
   "author": "Chavez Harris",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "configcat-node": "^9.1.0",
+    "redis": "^4.6.5"
+  }
 }
