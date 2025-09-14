@@ -1,16 +1,29 @@
-const configcat = require("configcat-node");
-const configcatRedisCache = require("./configcat-redis-cache");
+import * as configcat from "@configcat/sdk/node";
+import ConfigCatRedisCache from "./configcat-redis-cache.js";
 
-const redisOptions = { host: "localhost", port: 6379 };
+const redisOptions = { url: "redis://localhost:6379" };
 
-const configCatClient = configcat.getClient("0yDbCLmNK0qIUakB2LFJDA/u0Z5j4oDjkuHKOVJkIo9Dw", configcat.PollingMode.AutoPoll, 
-  {
-    cache: configcatRedisCache(redisOptions)
-  }
-);
+const configCatRedisCache = new ConfigCatRedisCache(redisOptions);
 
-setInterval(() => {
-  configCatClient.getValueAsync("isMyAwesomeFeatureEnabled", false).then(value => {
-    console.log(`${new Date().toTimeString()} isMyAwesomeFeatureEnabled: ${value}`);
-  });
-}, 5000);
+async function main() {
+  await configCatRedisCache.ensureReady();
+
+  const configCatClient = configcat.getClient(
+    "configcat-sdk-1/C-HdCN7xrUmB6kDjUpl3Rw/Vh6BkatYSUqLKGFP_rVHWA",
+    configcat.PollingMode.AutoPoll,
+    {
+      cache: configCatRedisCache,
+    },
+  );
+  setInterval(() => {
+    configCatClient
+      .getValueAsync("isAwesomeFeatureEnabled", false)
+      .then((value) => {
+        console.log(
+          `${new Date().toTimeString()} Your feature flag is: ${value}`,
+        );
+      });
+  }, 5000);
+}
+
+main();
