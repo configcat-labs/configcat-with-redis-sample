@@ -1,14 +1,5 @@
-const util = require("util");
-const redis = require("redis");
+import { createClient } from "redis";
 
-// Add the configcatRedisCache function below this line.
-
-
-
-// Add the .get method here below this line.
-
-
-
-// Add the .set method below this line.
-
-module.exports = configcatRedisCache;
+export class MyRedisCache {
+  constructor(redisOptions) {}
+}
