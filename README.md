@@ -52,7 +52,7 @@ Toggling on or off the feature flag within your [ConfigCat dashboard](https://ap
 Useful links to technical resources.
 
 - [Using a custom cache implementation](https://configcat.com/docs/sdk-reference/node/#using-custom-cache-implementation)
-- [Official Redis website]([https://redis.io/docs/about/](https://redis.io/))
+- [Official Redis website](https://redis.io/)
 
 [**ConfigCat**](https://configcat.com) also supports many other frameworks and languages. Check out the full list of supported SDKs [here](https://configcat.com/docs/sdk-reference/overview/).
 
