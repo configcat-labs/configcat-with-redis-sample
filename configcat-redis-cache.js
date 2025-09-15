@@ -1,42 +1,32 @@
 import { createClient } from "redis";
 
-export default class ConfigCatRedisCache {
-  constructor(redisClientOps) {
-    this.cacheClient = createClient(redisClientOps);
-    this.isRedisAvailable = false;
+export default class MyRedisCache {
+  constructor(redisOptions) {
+    this.cacheClient = createClient(redisOptions);
 
     this.cacheClient.on("connect", () => {
       console.log("Connected to Redis");
-      this.isRedisAvailable = true;
     });
 
     this.cacheClient.on("error", (err) => {
-      console.error("Redis error:", err);
-      this.isRedisAvailable = false;
+      console.error("Redis error", err);
     });
-
-    this.ready = this.cacheClient
-      .connect()
-      .then(() => {
-        this.isRedisAvailable = true;
-      })
-      .catch((err) => {
-        console.error("Failed to connect to Redis:", err);
-        this.isRedisAvailable = false;
-      });
   }
 
-  async ensureReady() {
-    await this.ready;
+  async connect() {
+    if (!this.cacheClient.isOpen) {
+      await this.cacheClient.connect();
+    }
+  }
+
+  async disconnect() {
+    await this.cacheClient.quit();
   }
 
   async get(key) {
-    await this.ensureReady();
-    if (!this.isRedisAvailable) return null;
-
     try {
       const value = await this.cacheClient.get(key);
-      console.log(`GET key "${key}" returned:`, value);
+      console.log("GET", key);
       return value;
     } catch (err) {
       console.error("Redis GET error:", err);
@@ -45,12 +35,9 @@ export default class ConfigCatRedisCache {
   }
 
   async set(key, item) {
-    await this.ensureReady();
-    if (!this.isRedisAvailable) return;
-
     try {
       await this.cacheClient.set(key, item);
-      console.log(`SET key "${key}" = ${item}`);
+      console.log("SET", key);
     } catch (err) {
       console.error("Redis SET error:", err);
     }

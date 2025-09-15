@@ -1,18 +1,18 @@
 import * as configcat from "@configcat/sdk/node";
-import ConfigCatRedisCache from "./configcat-redis-cache.js";
+import MyRedisCache from "./configcat-redis-cache.js";
 
 const redisOptions = { url: "redis://localhost:6379" };
 
-const configCatRedisCache = new ConfigCatRedisCache(redisOptions);
+const myRedisCache = new MyRedisCache(redisOptions);
 
 async function main() {
-  await configCatRedisCache.ensureReady();
+  await myRedisCache.connect();
 
   const configCatClient = configcat.getClient(
-    "configcat-sdk-1/C-HdCN7xrUmB6kDjUpl3Rw/Vh6BkatYSUqLKGFP_rVHWA",
+    "YOUR-CONFIGCAT-SDK-KEY",
     configcat.PollingMode.AutoPoll,
     {
-      cache: configCatRedisCache,
+      cache: myRedisCache,
     },
   );
   setInterval(() => {
@@ -24,6 +24,12 @@ async function main() {
         );
       });
   }, 5000);
+
+  process.on("SIGINT", async () => {
+    console.log("Shutting down...");
+    await myRedisCache.disconnect();
+    process.exit();
+  });
 }
 
 main();
