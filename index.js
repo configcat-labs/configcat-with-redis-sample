@@ -24,12 +24,6 @@ async function main() {
         );
       });
   }, 5000);
-
-  process.on("SIGINT", async () => {
-    console.log("Shutting down...");
-    await myRedisCache.disconnect();
-    process.exit();
-  });
 }
 
 main();
