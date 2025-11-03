@@ -1,16 +1,10 @@
-const configcat = require("configcat-node");
-const configcatRedisCache = require("./configcat-redis-cache");
+import * as configcat from "@configcat/sdk";
+import { MyRedisCache } from "./configcat-redis-cache.js";
 
-const redisOptions = { host: "localhost", port: 6379 };
+const redisOptions = { url: "redis://localhost:6379" };
 
-const configCatClient = configcat.getClient("0yDbCLmNK0qIUakB2LFJDA/u0Z5j4oDjkuHKOVJkIo9Dw", configcat.PollingMode.AutoPoll, 
-  {
-    cache: configcatRedisCache(redisOptions)
-  }
-);
+const myRedisCache = new MyRedisCache(redisOptions);
 
-setInterval(() => {
-  configCatClient.getValueAsync("isMyAwesomeFeatureEnabled", false).then(value => {
-    console.log(`${new Date().toTimeString()} isMyAwesomeFeatureEnabled: ${value}`);
-  });
-}, 5000);
+async function main() {}
+
+main();
