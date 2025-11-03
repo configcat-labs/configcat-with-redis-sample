@@ -26,7 +26,7 @@ docker run --name container-redis -p 6379:6379 -d redis
 
 **4** Add your [ConfigCat SDK key](https://app.configcat.com/sdkkey) to the `index.js` file.
 
-**4.** Start the app:
+**5.** Start the app:
 
 ```sh
 npm start
@@ -39,17 +39,16 @@ You should see the following output logged to your terminal every 5 seconds:
 > node index.js
 
 Connected to Redis
-GET 3edb7f76432d79e0821d68bee15a168a60e83ca7
-SET 3edb7f76432d79e0821d68bee15a168a60e83ca7
-GET 3edb7f76432d79e0821d68bee15a168a60e83ca7
-20:23:19 GMT-0400 (Guyana Time) Your feature flag is: true
-GET 3edb7f76432d79e0821d68bee15a168a60e83ca7
-20:23:24 GMT-0400 (Guyana Time) Your feature flag is: true
-GET 3edb7f76432d79e0821d68bee15a168a60e83ca7
-20:23:29 GMT-0400 (Guyana Time) Your feature flag is: true
+By default, ConfigCat’s auto-polling interval is 60 seconds. This means the cache is refreshed with the latest feature flag values from the ConfigCat Dashboard every 60 seconds. When you query a feature flag value between intervals, the result is served from the Redis cache instead of making a request to the Dashboard.
+17:56:55 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
+17:57:00 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
+17:57:05 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
+17:57:10 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
+17:57:15 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
+17:57:20 GMT-0300 (French Guiana Time) isMyAwesomeFeatureEnabled: false
 ```
 
-By default, ConfigCat’s auto-polling interval is 60 seconds. This means the cache is refreshed with the latest feature flag values from the ConfigCat Dashboard every 60 seconds. When you query a feature flag value between intervals, the result is served from the Redis cache instead of making a request to the Dashboard.
+Toggling on or off the feature flag within your [ConfigCat dashboard](https://app.configcat.com) will force the cache to refresh. As a result, The new value will be pulled from [ConfigCat](https://configcat.com) to replace the existing value in the cache.
 
 ## Learn more
 
